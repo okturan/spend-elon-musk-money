@@ -1,6 +1,6 @@
 # Spend Elon Musk's Money!
 
-This project was inspired by [Spend Elon Musk's Money](https://neal.fun/spend/). It was created as part of the Patika Front End Bootcamp Week 10 assignment.
+This project was inspired by [Spend Bill Gates' Money](https://neal.fun/spend/). It was created as part of the Patika Front End Bootcamp Week 10 assignment.
 
 ## About the Project
 
