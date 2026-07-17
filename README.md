@@ -21,6 +21,19 @@ You can check out the live demo of this project [here](https://spend-elon-musk-m
 - Display budget with real-time updates as items are added or removed from the cart.
 - An interactive catalog of items with prices, images, and purchase options.
 - A receipt section that summarizes all items purchased, with totals displayed.
+- Atomic spending rules that prevent overspending and negative quantities, even during rapid input.
+- Accessible live budget, quantity, and receipt totals plus a one-click reset.
+
+## Verified behavior
+
+The spending rules are isolated from React rendering and tested for buy/sell accounting, budget limits, non-negative quantities, receipt totals, and reset behavior.
+
+```sh
+npm ci
+npm test
+npm run lint
+npm run build
+```
 
 ## Technologies Used
 

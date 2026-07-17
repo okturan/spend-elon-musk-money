@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import ReceiptItem from "./ReceiptItem";
 
-function Receipt({ cart, totalSpent }) {
+function Receipt({ cart, totalSpent, onReset }) {
   const purchasedItems = Object.values(cart).filter((item) => item.quantity > 0);
 
   return (
@@ -23,8 +23,15 @@ function Receipt({ cart, totalSpent }) {
       <div className="mt-4">
         <div className="flex justify-between font-semibold">
           <span className="whitespace-nowrap mr-2">Total: </span>
-          <span className="text-right">${totalSpent.toLocaleString()}</span>
+          <output className="text-right" aria-live="polite" aria-label="Total spent">${totalSpent.toLocaleString()}</output>
         </div>
+        <button
+          type="button"
+          disabled={totalSpent === 0}
+          onClick={onReset}
+          className="mt-4 w-full rounded bg-slate-800 px-4 py-2 text-white disabled:bg-slate-300">
+          Reset purchases
+        </button>
       </div>
     </footer>
   );
@@ -39,6 +46,7 @@ Receipt.propTypes = {
     }),
   ).isRequired,
   totalSpent: PropTypes.number.isRequired,
+  onReset: PropTypes.func.isRequired,
 };
 
 export default Receipt;

@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useReducer } from "react";
 import Header from "./components/Header";
 import ItemCard from "./components/ItemCard";
 import Receipt from "./components/Receipt";
+import { calculateTotalSpent, createSpendingState, updateSpendingState } from "./spending";
 
 const initialBudget = 247_000_000_000;
 
@@ -74,38 +75,25 @@ const items = {
   66: { name: "Mars Colony", price: 100000000000, img: "/images/66_mars_colony.webp" },
 };
 
-const emptyCart = structuredClone(items);
-Object.values(emptyCart).forEach((item) => (item.quantity = 0));
-
 function App() {
-  const [budget, setBudget] = useState(initialBudget);
-  const [cart, setCart] = useState(emptyCart);
-
-  const updateCart = (id, operation) => {
-    const itemPrice = items[id].price;
-
-    setBudget((prevBudget) => (operation === "add" ? prevBudget - itemPrice : prevBudget + itemPrice));
-
-    setCart((prevCart) => {
-      const newCart = structuredClone(prevCart);
-      newCart[id].quantity += operation === "add" ? 1 : -1;
-      return newCart;
-    });
-  };
-
-  const totalSpent = initialBudget - budget;
+  const [state, dispatch] = useReducer(
+    updateSpendingState,
+    null,
+    () => createSpendingState(items, initialBudget),
+  );
+  const totalSpent = calculateTotalSpent(state.cart);
 
   return (
     <div className="max-w-6xl mx-auto p-4">
-      <Header budget={budget} />
+      <Header budget={state.budget} />
 
       <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {Object.entries(cart).map(([id, item]) => (
-          <ItemCard key={id} id={id} item={item} budget={budget} updateCart={updateCart} />
+        {Object.entries(state.cart).map(([id, item]) => (
+          <ItemCard key={id} id={id} item={item} budget={state.budget} dispatch={dispatch} />
         ))}
       </div>
 
-      <Receipt cart={cart} totalSpent={totalSpent} />
+      <Receipt cart={state.cart} totalSpent={totalSpent} onReset={() => dispatch({ type: "reset" })} />
     </div>
   );
 }
